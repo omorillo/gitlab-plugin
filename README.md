@@ -1,5 +1,6 @@
 # Table of Contents
 - [Introduction](#introduction)
+- [Migration to plugin version 1.2.x](#migration-to-plugin-version-12x)
 - [User support](#user-support)
 - [Known bugs/issues](#known-bugsissues)
 - [Supported GitLab versions](#supported-gitlab-versions)
@@ -21,6 +22,10 @@
 # Introduction
 
 This plugin allows GitLab to trigger builds in Jenkins after code is pushed and/or after a merge request is created.
+
+# Migration to plugin version **1.2.x**
+
+For instruction how to migrate from an older version to version **1.2.x**, read the [Migration Guidelines](https://github.com/jenkinsci/gitlab-plugin/doc/migration-guidelines.md)
 
 # User support
 
