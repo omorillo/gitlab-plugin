@@ -77,7 +77,7 @@ To enable this functionality, a user should be set up on GitLab, with GitLab 'De
 
 ## Jenkins Job Configuration
 
-The main task of the ``GitLab plugin`` is to allow the automate triggering of jobs upon ``merge`` and/or ``push`` events. For the configuration of automate triggering, the plugin provides a set of parameter which can be used to setup the ``Git`` repository in the target ``Jenkins`` job(s). A list of these parameters follows below:
+The main task of the ``GitLab plugin`` is to allow the automate triggering of jobs upon ``merge`` and/or ``push`` events. For the configuration of automate triggering, the plugin provides a set of parameters which can be used to set up the ``Git`` repository in the target ``Jenkins`` job(s). A list of these parameters follows below:
 
 * gitlabBranch
 * gitlabSourceBranch
@@ -214,9 +214,9 @@ In order to build when a new tag is pushed:
 
 # Parameterized builds
 
-You may also want to set up a [``parameterized build job``](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build) for manual triggering of a job. To this end, you may use the [EnvInjectPlugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin) to inject the manually defined parameters to the git repository. Below it will be explained how to use the plugin for this purpose.
+You may also want to set up a [``parameterized build job``](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build) in order to manually triggering a job. To this end, you may use the [EnvInjectPlugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin) to inject manually-defined parameters to the git repository. Below it will be explained how to use the plugin for this purpose.
 
-The high-level idea is to provide custom variables through the [``Parameterized Build plugin``](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build) which are used to configure the ``Git`` repository information in the job (instead of using the ``GitLab plugin`` parameters directly) and to replace the content in these variables with the ``GitLab plugin`` parameters values upon automate triggering.
+The high-level idea is to add custom variables through the [``Parameterized Build plugin``](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build) which are used instead of the predefined parameters by the ``GitLab plugin`` to configure the ``Git`` repository information in the job and to replace the manually set variables content with the content of the plugin parameters if they are filled, which is the case if the job was triggered automatically.
 
 ## Example:
 
