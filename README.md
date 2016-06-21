@@ -76,6 +76,30 @@ Optionally, the plugin communicates with the GitLab server in order to fetch add
 To enable this functionality, a user should be set up on GitLab, with GitLab 'Developer' permissions, to access the repository. You will need to give this user access to each repo you want Jenkins to be able to clone. Log in to GitLab as that user, go to its profile, and copy its secret API key. On the Global Configuration page in Jenkins, supply the GitLab host URL, e.g. ``http://your.gitlab.server.`` Click the 'Add' button to add a credential, choose 'Secret text' as the kind of credential, and paste your GitLab user's API key into the 'Secret' field. Testing the connection should succeed.
 
 ## Jenkins Job Configuration
+
+The main task of the ``GitLab plugin`` is to allow the automate triggering of jobs upon ``merge`` and/or ``push`` events. For the configuration of automate triggering, the plugin provides a set of parameter which can be used to setup the ``Git`` repository in the target ``Jenkins`` job(s). A list of these parameters follows below:
+
+* gitlabBranch
+* gitlabSourceBranch
+* gitlabActionType
+* gitlabUserName
+* gitlabUserEmail
+* gitlabSourceRepoHomepage
+* gitlabSourceRepoName
+* gitlabSourceNamespace
+* gitlabSourceRepoURL
+* gitlabSourceRepoSshUrl
+* gitlabSourceRepoHttpUrl
+* gitlabMergeRequestTitle
+* gitlabMergeRequestDescription
+* gitlabMergeRequestId
+* gitlabMergeRequestIid
+* gitlabTargetBranch
+* gitlabTargetRepoName
+* gitlabTargetNamespace
+* gitlabTargetRepoSshUrl
+* gitlabTargetRepoHttpUrl
+
 ### Git configuration for Freestyle jobs
 1. In the *Source Code Management* section:
     1. Click *Git*
@@ -190,29 +214,29 @@ In order to build when a new tag is pushed:
 
 # Parameterized builds
 
-You can trigger a job a manually by clicking ``This build is parameterized`` and adding the any of the relevant build parameters.
-These include:
+You may also want to set up a [``parameterized build job``](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build) for manual triggering of a job. To this end, you may use the [EnvInjectPlugin](https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin) to inject the manually defined parameters to the git repository. Below it will be explained how to use the plugin for this purpose.
 
-* gitlabBranch
-* gitlabSourceBranch
-* gitlabActionType
-* gitlabUserName
-* gitlabUserEmail
-* gitlabSourceRepoHomepage
-* gitlabSourceRepoName
-* gitlabSourceNamespace
-* gitlabSourceRepoURL
-* gitlabSourceRepoSshUrl
-* gitlabSourceRepoHttpUrl
-* gitlabMergeRequestTitle
-* gitlabMergeRequestDescription
-* gitlabMergeRequestId
-* gitlabMergeRequestIid
-* gitlabTargetBranch
-* gitlabTargetRepoName
-* gitlabTargetNamespace
-* gitlabTargetRepoSshUrl
-* gitlabTargetRepoHttpUrl
+The high-level idea is to provide custom variables through the [``Parameterized Build plugin``](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Build) which are used to configure the ``Git`` repository information in the job (instead of using the ``GitLab plugin`` parameters directly) and to replace the content in these variables with the ``GitLab plugin`` parameters values upon automate triggering.
+
+## Example:
+
+You want to parameterize ``GitLab`` **source** and **target** branches. To this end, you add two new variables through the [Parameterized Trigger plugin](https://wiki.jenkins-ci.org/display/JENKINS/Parameterized+Trigger+Plugin) with unreserved names e.g. "SourceBranch" and "TargetBranch" (but not _"gitlabSourceBranch"_ or _"gitlabTargetBranch"_ which are reserved by the plugin) and you overwrite in the _EnvInjectPlugin_ "EvaluateScript" text area the variables with the branches specified in the variables _gitlabSourceBranch_ and _gitlabTargetBranch_ if these variables are filled.
+
+In any place where you would use _gitlabSourceBranch_ and _gitlabTargetBranch_ you use your own variables instead.
+
+The check should look as follows:
+
+```groovy
+// overrides the value in "SourceBranch" when gitlabSourceBranch is set
+if (binding.variables.containsKey('gitlabSourceBranch')) {
+    return [SourceBranch: "$gitlabSourceBranch"]
+}
+
+// overrides the value in "TargetBranch" when gitlabTargetBranch is set
+if (binding.variables.containsKey('gitlabTargetBranch')) {
+    return [TargetBranch: "$gitlabTargetBranch"]
+}
+```
 
 # Contributing to the Plugin
 
