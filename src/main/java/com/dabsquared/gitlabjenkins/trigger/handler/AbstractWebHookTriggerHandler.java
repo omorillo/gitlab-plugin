@@ -17,6 +17,7 @@ import hudson.model.Job;
 import hudson.plugins.git.RevisionParameterAction;
 import jenkins.model.Jenkins;
 import jenkins.model.ParameterizedJobMixIn;
+import jenkins.model.ParameterizedJobMixIn.ParameterizedJob;
 import net.karneim.pojobuilder.GeneratePojoBuilder;
 import org.eclipse.jgit.transport.URIish;
 
@@ -106,9 +107,11 @@ public abstract class AbstractWebHookTriggerHandler<H extends WebHook> implement
     }
 
     private void scheduleBuild(Job<?, ?> job, Action[] actions) {
+
+        JobCanceller.cancelOutdatedScheduledJobs(job, actions);
         int projectBuildDelay = 0;
-        if (job instanceof ParameterizedJobMixIn.ParameterizedJob) {
-            ParameterizedJobMixIn.ParameterizedJob abstractProject = (ParameterizedJobMixIn.ParameterizedJob) job;
+        if (job instanceof ParameterizedJob) {
+            ParameterizedJob abstractProject = (ParameterizedJob) job;
             if (abstractProject.getQuietPeriod() > projectBuildDelay) {
                 projectBuildDelay = abstractProject.getQuietPeriod();
             }
