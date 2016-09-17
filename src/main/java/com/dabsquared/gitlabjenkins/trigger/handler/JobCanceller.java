@@ -68,6 +68,7 @@ public class JobCanceller {
                             && triggerCauseData.getTargetProjectId().equals(causeData.getTargetProjectId())
                             && StringUtils.equals(triggerCauseData.getBranch(), causeData.getBranch())
                             && StringUtils.equals(triggerCauseData.getSourceBranch(), causeData.getSourceBranch())
+                            && StringUtils.equals(triggerCauseData.getTargetBranch(), causeData.getTargetBranch())
                             && StringUtils.equals(triggerCauseData.getUserName(), causeData.getUserName())
                             && StringUtils.equals(triggerCauseData.getUserEmail(), causeData.getUserEmail())) {
                             LOGGER.log(Level.INFO, String.format(
